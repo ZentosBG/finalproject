@@ -1,6 +1,7 @@
 from pygame import *
 from random import randint
 
+from cards import cards_list
 mixer.init()
 font.init()
 init()
@@ -33,21 +34,36 @@ class GameSprite(sprite.Sprite):
 
 
 
-cards = ["cards/CLOUDCASTEL.png","cards/CRIMSON.png","cards/DARK FLLATOR.png","cards/DARK HINGHLANDER.png","cards/DRAGON KNIGHT.png","cards/FAERI DRAGON.png","cards/GDAGON IMPULSO.png","cards/GENOYIOYS.png","cards/HERALD.png","cards/LEO.png","cards/POWER DRAGON.png","cards/STARDUS DRAGON.png","cards/TATSON.png","cards/UNDERWORLD.png","cards/UNICORN.png","cards/VANARGANDER.png","cards/VINGMAN.png"]
+
 card_rand = randint(0,17)
 
-# class Player(GameSprite):
-#     def __init__(self):
-#         super().__init__("" , 400, 450, 60, 100)
-#         self.speed = 5
-#         self.hp = 500
-#         self.points = 0
-#         self.ballets = sprite.Group()
+class Player:
+    def __init__(self):
+        self.hp = 500
+        self.ballets = sprite.Group()
+        self.cards = 
 
-#     def card(self):
-#         cards = [card_rand]
+    # def card(self):
+    #     cards = [card_rand]
+
+class Enemy(GameSprite):
+    def __init__(self):
+        super().__init__(card_rand , 10, 90, 20, 20)
+        self.hp = 500
+        self.cards =
+
+    # def card(self):
+    #     cards = [card_rand]
 
 
+class Card(GameSprite):
+    def __init__(self):
+        super().__init__()
+        self.DEF = 0
+        self.ATK = 0
+        
+
+    
 
 
 
@@ -64,12 +80,13 @@ while run:
         if e.type == QUIT:
             run = False
     
-    # if not finish:
-        
+    if not finish:
+        pass
 
 
 
-    # else:
-        # window.blit(result, (200, 200))
+    else:
+        window.blit(result, (200, 200))
+
     display.update()
     clock.tick(FPS)

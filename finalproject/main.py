@@ -57,19 +57,29 @@ class Enemy(GameSprite):
 
 
 class Card(GameSprite):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name, card_img, defend, atk):
+        super().__init__('reverse.png', x, y, width, height)
+        self.name = name
+        self.card_img = card_img
         self.DEF = 0
         self.ATK = 0
-        
-
-    
+            
 
 
 
 bg_image = transform.scale(image.load("cards/Pole.png"),(WIDTH, HEIGHT))
 
 clock = time.Clock()
+p_cards = []
+for card in cards_list:
+    new_card = Card(card, cards_list[card]['img'],cards_list[card]['def'],cards_list[card]['atk'])
+    p_cards.append(new_card)
+
+e_cards = []
+for card in cards_list:
+    new_card = Card(card, cards_list[card]['img'],cards_list[card]['def'],cards_list[card]['atk'])
+    e_cards.append(new_card)
+
 FPS = 60
 run = True
 finish = False

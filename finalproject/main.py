@@ -58,7 +58,7 @@ class Enemy(GameSprite):
 
 class Card(GameSprite):
     def __init__(self, name, card_img, defend, atk):
-        super().__init__('reverse.png', x, y, width, height)
+        super().__init__('reverse.jpg', x, y, width, height)
         self.name = name
         self.card_img = card_img
         self.DEF = 0

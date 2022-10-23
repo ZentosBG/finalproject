@@ -11,9 +11,17 @@ HEIGHT = 600
 window = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Zenterost")
 
+place_card_e = {
+    "one_card" : (100,50),
+    "two_card" : (150,50),
+    "three_card" : (200,50)
+}
 
-
-
+place_card_p = {
+    "one_card" : (100,150),
+    "two_card" : (150,150),
+    "three_card" : (200,150)
+}
 
 
 
@@ -34,26 +42,21 @@ class GameSprite(sprite.Sprite):
 
 
 
-
-card_rand = randint(0,17)
-
 class Player:
     def __init__(self):
         self.hp = 500
         self.ballets = sprite.Group()
-        self.cards = 
+        self.cards = []
+        self.cometery_cards = []
 
-    # def card(self):
-    #     cards = [card_rand]
 
-class Enemy(GameSprite):
+
+class Enemy():
     def __init__(self):
-        super().__init__(card_rand , 10, 90, 20, 20)
         self.hp = 500
-        self.cards =
+        self.cards = []
+        self.cometery_cards = []
 
-    # def card(self):
-    #     cards = [card_rand]
 
 
 class Card(GameSprite):
@@ -64,21 +67,30 @@ class Card(GameSprite):
         self.DEF = 0
         self.ATK = 0
             
+    def move(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
 
 
 
 bg_image = transform.scale(image.load("cards/Pole.png"),(WIDTH, HEIGHT))
 
+player = Player()
 clock = time.Clock()
-p_cards = []
+player.cards = []
 for card in cards_list:
     new_card = Card(card, cards_list[card]['img'],cards_list[card]['def'],cards_list[card]['atk'])
-    p_cards.append(new_card)
+    player.cards.append(new_card)
 
-e_cards = []
+enemy = Enemy()
+enemy.cards = []
 for card in cards_list:
     new_card = Card(card, cards_list[card]['img'],cards_list[card]['def'],cards_list[card]['atk'])
-    e_cards.append(new_card)
+    enemy.cards.append(new_card)
+
+r_card = 0
+rt = 0
+n_e_c = 18
 
 FPS = 60
 run = True
@@ -91,12 +103,26 @@ while run:
             run = False
     
     if not finish:
-        pass
+
+        if  len(enemy.cards) > 0:
+            if rt == True:
+                enemy.cards[r_card].move(place_card_e[one_card])
+                r_card += 1
+                window.blit(enemy.cards[r_card], (place_card_e[two_card]))
+                r_card += 1
+                window.blit(enemy.cards[r_card], (place_card_e[three_card]))
+                r_card += 1
+                rt == False
+            else:
+                pass
+        else:
+            pass
+
 
 
 
     else:
         window.blit(result, (200, 200))
-
+    enemy.cards.draw(window)
     display.update()
     clock.tick(FPS)

@@ -12,6 +12,18 @@ window = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Zenterost")
 
 
+place_card_e = {
+    "one_card" : (100,50),
+    "two_card" : (150,50),
+    "three_card" : (200,50)
+}
+
+place_card_p = {
+    "one_card" : (100,150),
+    "two_card" : (150,150),
+    "three_card" : (200,150)
+}
+
 
 
 class GameSprite(sprite.Sprite):
@@ -56,7 +68,9 @@ class Card(GameSprite):
         self.DEF = defend
         self.ATK = atk
             
-
+    def move(self, pos):
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
 
 
 bg_image = transform.scale(image.load("cards/Pole.png"),(WIDTH, HEIGHT))
@@ -94,6 +108,7 @@ FPS = 60
 r_card = 0
 rt = 0
 n_e_c = 18
+rt = True
 
 run = True
 finish = False
@@ -113,21 +128,22 @@ while run:
 
         if  len(enemy.cards) > 0:
             if rt == True:
-                enemy.cards[r_card].move(place_card_e[one_card])
+                enemy.cards[r_card].move(place_card_e['one_card'])
                 r_card += 1
-                window.blit(enemy.cards[r_card], (place_card_e[two_card]))
+                enemy.cards[r_card].move(place_card_e['two_card'])
                 r_card += 1
-                window.blit(enemy.cards[r_card], (place_card_e[three_card]))
+                enemy.cards[r_card].move(place_card_e['three_card'])
                 r_card += 1
-                rt == False
+                rt = False
             else:
                 pass
         else:
             pass
 
-
     else:   
         window.blit(result, (200, 200))
-    enemy.cards.draw(window)
+
+    for card in enemy.cards:
+        card.draw()
     display.update()
     clock.tick(FPS)

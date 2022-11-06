@@ -13,18 +13,28 @@ display.set_caption("Zenterost")
 
 
 place_card_e = {
-    "one_card" : (100,50),
-    "two_card" : (150,50),
-    "three_card" : (200,50)
+    "one_card" : (244,18),
+    "two_card" : (390,17),
+    "three_card" : (534,17)
 }
 
 place_card_p = {
-    "one_card" : (100,150),
-    "two_card" : (150,150),
-    "three_card" : (200,150)
+    "one_card" : (244,236),
+    "two_card" : (390,235),
+    "three_card" : (537,235)
 }
 
+# place_card_e = {
+#     "one_card" : (int(HEIGHT / 2.459),int(WIDTH / 50)),
+#     "two_card" : (int(HEIGHT / 1.538),int(WIDTH / 52.941)),
+#     "three_card" : (int(HEIGHT / 1.123),int(WIDTH / 52.941))
+# }
 
+# place_card_p = {
+#     "one_card" : (int(HEIGHT / 2.459),int(WIDTH / 3.813)),
+#     "two_card" : (int(HEIGHT / 1.538),int(WIDTH / 3.829)),
+#     "three_card" : (int(HEIGHT / 1.117),int(WIDTH / 3.829))
+# }
 
 class GameSprite(sprite.Sprite):
     def __init__(self, image_name, x, y, width, height):
@@ -64,13 +74,17 @@ class Card(GameSprite):
     def __init__(self, name, card_img, defend, atk, x, y):
         super().__init__('cards/reverse.png', x, y, 120, 180)
         self.name = name
-        self.card_img = transform.scale(image.load(card_img),(60,100))
+        self.card_img = transform.scale(image.load(card_img),(120,180))
         self.DEF = defend
         self.ATK = atk
             
     def move(self, pos):
         self.rect.x = pos[0]
         self.rect.y = pos[1]
+
+    def reverse(self):
+        self.image = self.card_img
+
 
 
 bg_image = transform.scale(image.load("cards/Pole.png"),(WIDTH, HEIGHT))
@@ -105,10 +119,13 @@ for card in name_cards:
 
 FPS = 60
 
-r_card = 0
-rt = 0
+r_card_e = 0
+
+r_card_p = 0
+
 n_e_c = 18
-rt = True
+rt_e = True
+rt_p = True
 
 run = True
 finish = False
@@ -120,21 +137,41 @@ while run:
             run = False
     
     if not finish:
-        for card in player.cards:
-            card.draw()
+        # for card in player.cards:
+        #     card.draw()
 
-        for card in enemy.cards:
-            card.draw()
+        # for card in enemy.cards:
+        #     card.draw()
 
         if  len(enemy.cards) > 0:
-            if rt == True:
-                enemy.cards[r_card].move(place_card_e['one_card'])
-                r_card += 1
-                enemy.cards[r_card].move(place_card_e['two_card'])
-                r_card += 1
-                enemy.cards[r_card].move(place_card_e['three_card'])
-                r_card += 1
-                rt = False
+            if rt_e == True:
+                enemy.cards[r_card_e].move(place_card_e['one_card'])
+                enemy.cards[r_card_e].reverse()
+                r_card_e += 1
+                enemy.cards[r_card_e].move(place_card_e['two_card'])
+                enemy.cards[r_card_e].reverse()
+                r_card_e += 1
+                enemy.cards[r_card_e].move(place_card_e['three_card'])
+                enemy.cards[r_card_e].reverse()
+                r_card_e += 1
+                rt_e = False
+            else:
+                pass
+        else:
+            pass
+
+        if  len(player.cards) > 0:
+            if rt_p == True:
+                player.cards[r_card_p].move(place_card_p['one_card'])
+                player.cards[r_card_p].reverse()
+                r_card_p += 1
+                player.cards[r_card_p].move(place_card_p['two_card'])
+                player.cards[r_card_p].reverse()
+                r_card_p += 1
+                player.cards[r_card_p].move(place_card_p['three_card'])
+                player.cards[r_card_p].reverse()
+                r_card_p += 1
+                rt_p = False
             else:
                 pass
         else:
@@ -144,6 +181,8 @@ while run:
         window.blit(result, (200, 200))
 
     for card in enemy.cards:
+        card.draw()
+    for card in player.cards:
         card.draw()
     display.update()
     clock.tick(FPS)

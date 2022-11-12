@@ -11,6 +11,7 @@ HEIGHT = 600
 window = display.set_mode((WIDTH, HEIGHT))
 display.set_caption("Zenterost")
 
+
 font1 = font.SysFont("Impact",35)
 font2 = font.SysFont("Impact",35)
 font3 = font.SysFont("Impact",70)
@@ -57,7 +58,7 @@ class GameSprite(sprite.Sprite):
 
 class Person:
     def __init__(self):
-        self.hp = 2000
+        self.hp = 400
         self.cards = []
         self.cards_table = []
 
@@ -70,17 +71,19 @@ class Player(Person):
 class Enemy(Person):
     pass
        
-move_ = "Почати"  
-class Nexte(sprite.Sprite):
-    def __init__(self, x, y, width, height):
-        super().__init__(move_, x, y, width, height)
-        self.rect.x = x 
-        self.rect.y = y 
-        self.width = width
-        self.height = height
+text_nexte = "Дальше"
+class Nexte():
+    def __init__(self, text, x, y, width, height):
+        self.rect = Rect(x, y, width, height)
+        self.color = (252,192,3)
+        self.font = font.SysFont("Arial",50)
+        self.text = self.font.render(text_nexte, True, (0, 0, 0))
 
-nexte = Nexte(500, 50, 100, 30)
+    def draw(self):
+        draw.rect(window, self.color, self.rect)
+        window.blit(self.text, (self.rect.x + 5, self.rect.y + 5))
 
+nexte = Nexte(text_nexte, 700, 260, 160, 75)
 
 class Card(GameSprite):
     def __init__(self, name, card_img, defend, atk, x, y):
@@ -166,6 +169,11 @@ def update_hp( p_cards_table, e_cards_table):
     else:
         pass
     
+    if enemy.hp < 0:
+        enemy.hp = 0
+
+    if player.hp < 0:
+        player.hp = 0
    
 
     if True:
@@ -179,8 +187,7 @@ def update_hp( p_cards_table, e_cards_table):
     
 
     
-    # p_cards_table.clear(all)
-    # e_cards_table.clear(all)
+    
 
 FPS = 60
 
@@ -195,13 +202,14 @@ rt_p = True
 run = True
 finish = False
 
-
+time_press = 0
 
 while run:
     window.blit(bg_image, (0, 0))
     for e in event.get():
         if e.type == QUIT:
             run = False
+
     
 
     hp_playe = "hp player:" + str(player.hp)
@@ -211,26 +219,29 @@ while run:
 
 
     if not finish:
-        # for card in player.cards:
-        #     card.draw()
+        for card in player.cards:
+            card.draw()
 
-        # for card in enemy.cards:
-        #     card.draw()
+        for card in enemy.cards:
+            card.draw()
 
-        if  len(enemy.cards) > 0 and len(player.cards) > 0:
+        if  len(enemy.cards) >= 0 and len(player.cards) >= 0:
             if rt_e == True:
                 enemy.cards[r_card_e].move(place_card_e['one_card'])
                 enemy.cards[r_card_e].reverse()
-                enemy.cards_table.append(player.cards[r_card_p])
-                r_card_e += 1
+                enemy.cards_table.append(enemy.cards[r_card_e])
+                enemy.cards.remove(enemy.cards[r_card_e])
+                
                 enemy.cards[r_card_e].move(place_card_e['two_card'])
                 enemy.cards[r_card_e].reverse()
-                enemy.cards_table.append(player.cards[r_card_p])
-                r_card_e += 1
+                enemy.cards_table.append(enemy.cards[r_card_e])
+                enemy.cards.remove(enemy.cards[r_card_e])
+                
                 enemy.cards[r_card_e].move(place_card_e['three_card'])
                 enemy.cards[r_card_e].reverse()
-                enemy.cards_table.append(player.cards[r_card_p])
-                r_card_e += 1
+                enemy.cards_table.append(enemy.cards[r_card_e])
+                enemy.cards.remove(enemy.cards[r_card_e])
+                
                 rt_e = False
         
 
@@ -239,24 +250,35 @@ while run:
                 player.cards[r_card_p].reverse()
                 player.cards_table.append(player.cards[r_card_p])
                 player.cards.remove(player.cards[r_card_p])
-                r_card_p += 1
+                
                 player.cards[r_card_p].move(place_card_p['two_card'])
                 player.cards[r_card_p].reverse()
                 player.cards_table.append(player.cards[r_card_p])
                 player.cards.remove(player.cards[r_card_p])
-                r_card_p += 1
+                
                 player.cards[r_card_p].move(place_card_p['three_card'])
                 player.cards[r_card_p].reverse()
                 player.cards_table.append(player.cards[r_card_p])
                 player.cards.remove(player.cards[r_card_p])
-                r_card_p += 1
+                
                 rt_p = False
         
             click = mouse.get_pressed()
-            if click[0]:
-                x, y = mouse.get_pos()
-                if nexte.rect.collidepoint(x,y):
-                    update_hp(player.cards_table,enemy.cards_table)
+            if True:
+                time_press += 1
+
+            if time_press >= 12:
+                time_press = 0
+                if click[0]:
+                    x, y = mouse.get_pos()
+                    if nexte.rect.collidepoint(x,y):
+                        update_hp(player.cards_table,enemy.cards_table)
+                        player.cards_table.clear()
+                        enemy.cards_table.clear()
+                        rt_e = True
+                        rt_p = True
+                        
+                    
 
 
         if player.hp <= 0:
@@ -267,6 +289,9 @@ while run:
             finish = True
             result = font3.render("Ви Перемогли",True, (255,0,0))
 
+        # if len(enemy.cards) > 0 and len(player.cards) > 0:
+        #     finish = True
+        #     result = font3.render("Нічия",True, (255,0,0))
 
 
     else:   
@@ -284,6 +309,6 @@ while run:
     
     window.blit(hp__p, (WIDTH - 220, 520))
     window.blit(hp__e, (WIDTH - 220, 20))
-    window.blit(nexte)
+    nexte.draw()
     display.update()
     clock.tick(FPS)

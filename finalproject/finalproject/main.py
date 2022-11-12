@@ -70,6 +70,16 @@ class Player(Person):
 class Enemy(Person):
     pass
        
+move_ = "Почати"  
+class Nexte(sprite.Sprite):
+    def __init__(self, x, y, width, height):
+        super().__init__(move_, x, y, width, height)
+        self.rect.x = x 
+        self.rect.y = y 
+        self.width = width
+        self.height = height
+
+nexte = Nexte(500, 50, 100, 30)
 
 
 class Card(GameSprite):
@@ -242,8 +252,11 @@ while run:
                 r_card_p += 1
                 rt_p = False
         
-                update_hp(player.cards_table,enemy.cards_table)
-        
+            click = mouse.get_pressed()
+            if click[0]:
+                x, y = mouse.get_pos()
+                if nexte.rect.collidepoint(x,y):
+                    update_hp(player.cards_table,enemy.cards_table)
 
 
         if player.hp <= 0:
@@ -271,5 +284,6 @@ while run:
     
     window.blit(hp__p, (WIDTH - 220, 520))
     window.blit(hp__e, (WIDTH - 220, 20))
+    window.blit(nexte)
     display.update()
     clock.tick(FPS)

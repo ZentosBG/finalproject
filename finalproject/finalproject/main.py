@@ -76,14 +76,14 @@ class Nexte():
     def __init__(self, text, x, y, width, height):
         self.rect = Rect(x, y, width, height)
         self.color = (252,192,3)
-        self.font = font.SysFont("Arial",50)
+        self.font = font.SysFont("Arial",45)
         self.text = self.font.render(text_nexte, True, (0, 0, 0))
 
     def draw(self):
         draw.rect(window, self.color, self.rect)
         window.blit(self.text, (self.rect.x + 5, self.rect.y + 5))
 
-nexte = Nexte(text_nexte, 700, 260, 160, 75)
+nexte = Nexte(text_nexte, 700, 260, 180, 75)
 
 class Card(GameSprite):
     def __init__(self, name, card_img, defend, atk, x, y):
@@ -174,6 +174,7 @@ def update_hp( p_cards_table, e_cards_table):
 
     if player.hp < 0:
         player.hp = 0
+   
    
 
     if True:
@@ -281,17 +282,18 @@ while run:
                     
 
 
-        if player.hp <= 0:
+        if player.hp <= 0 or len(enemy.cards) <= 0 and player.hp < enemy.hp and len(enemy.cards_table) <= 0:
             finish = True
             result = font3.render("Ви Програли",True, (255,0,0))
 
-        if enemy.hp <= 0:
+        if enemy.hp <= 0 or len(player.cards) <= 0 and player.hp > enemy.hp and len(enemy.cards_table)<= 0: 
             finish = True
             result = font3.render("Ви Перемогли",True, (255,0,0))
 
-        # if len(enemy.cards) > 0 and len(player.cards) > 0:
-        #     finish = True
-        #     result = font3.render("Нічия",True, (255,0,0))
+        if enemy.hp == player.hp and len(player.cards) <= 0  and len(enemy.cards_table)<= 0: 
+            finish = True
+            result = font3.render("Нічия",True, (255,0,0))
+       
 
 
     else:   
